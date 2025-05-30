@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>選擇座位與餐點</title>
+</head>
+<body>
+    <h1>場次資訊</h1>
+    <p><strong>電影：</strong>{{ showtime.title }}</p>
+    <p><strong>影廳：</strong>{{ showtime.theater }}</p>
+    <p><strong>時間：</strong>{{ showtime.show_date }} {{ showtime.show_time }}</p>
+
+    <form method="POST" action="{{ url_for('place_order') }}">
+        <input type="hidden" name="showtime_id" value="{{ showtime.showtime_id }}">
+
+        <h2>請選擇座位：</h2>
+        {% for seat in seats %}
+            {% if seat.is_reserved %}
+                <label style="color: gray; margin: 5px;">
+                    <input type="checkbox" disabled>
+                    {{ seat.seat_number }}
+                </label>
+            {% else %}
+                <label style="margin: 5px;">
+                    <input type="checkbox" name="seats" value="{{ seat.seat_number }}">
+                    {{ seat.seat_number }}
+                </label>
+            {% endif %}
+            {% if loop.index % 5 == 0 %}<br>{% endif %}
+        {% endfor %}
+
+        <h2>選擇餐點</h2>
+        {% for food in food_items %}
+            <label>
+                {{ food.name }} - ${{ food.price }}
+                <input type="number" name="food_{{ food.food_id }}" value="0" min="0">
+            </label><br>
+        {% endfor %}
+
+        <br><button type="submit">確認訂購</button>
+    </form>
+</body>
+</html>
+
+
+
+
+

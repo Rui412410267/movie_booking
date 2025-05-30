@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>電影場次一覽</title>
+</head>
+<body>
+    <h1>電影場次一覽</h1>
+
+    {% set last_movie_id = None %}
+    {% for movie in movies %}
+        {% if movie.movie_id != last_movie_id %}
+            {% if not loop.first %}<hr>{% endif %}
+            <h2>{{ movie.title }} ({{ movie.genre }})</h2>
+            {% set last_movie_id = movie.movie_id %}
+        {% endif %}
+
+        {% if movie.showtime_id %}
+            📅 {{ movie.show_date }} ⏰ {{ movie.show_time }} 🎬 {{ movie.theater }}<br>
+            <a href="{{ url_for('showtime', showtime_id=movie.showtime_id) }}">立即訂票</a><br>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>
+
